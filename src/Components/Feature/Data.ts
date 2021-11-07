@@ -1,4 +1,4 @@
-import { IFeature, Status } from "./Types";
+import { IFeature, TestStatus } from "./Types";
 
 export async function getFeature(): Promise<IFeature> {
     const res = await fetch("/api/feature");
@@ -14,11 +14,12 @@ export async function getVariables(): Promise<object> {
     return variables;
 }
 
-export async function runStep(stepId: number): Promise<Status> {
-    const res = await fetch("/api/step/" + stepId, {
+export async function postStep(scenarioId: number, stepId: number): Promise<TestStatus> {
+    const res = await fetch(`/api/scenario/${scenarioId}/step/${stepId}`, {
         method: "POST"
-    })
-    const stepOutcome: { status: Status } = await res.json();
+    });
+
+    const stepOutcome: { status: TestStatus } = await res.json();
 
     return stepOutcome.status;
 }

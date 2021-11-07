@@ -16,5 +16,5 @@ export const useAsync = (fn: (...args: any[]) => Promise<any>, deps: any[] = [])
     if (error)
         throw error;
 
-    return { loading, error };
+    return loading;
 }
