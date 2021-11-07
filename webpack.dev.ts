@@ -33,7 +33,10 @@ const webpackConfig: webpack.Configuration = {
     },
     devServer: {
         hot: true,
-        port: 3001
+        port: 8080,
+        proxy: {
+            "/api": "http://localhost:3001"
+        }
     },
     plugins: [htmlPlugin]
 }
