@@ -27,10 +27,24 @@ export type TFeaturePlayer = ReturnType<typeof useFeaturePlayer>;
 export function useFeaturePlayer(feature: IFeature) {
     const [currentScenario, setCurrentScenario] = React.useState<IScenario>(null);
     const [currentStepId, setCurrentStepId] = React.useState<number>(null);
+    const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
+    const [isAutoplaying, setIsAutoplaying] = React.useState<boolean>(false);
 
-    const reset = () => {
+    const reset = (clearStatus: boolean) => {
         if (!feature)
             return;
+
+        setIsPlaying(false);
+        setIsAutoplaying(false);
+
+        if (clearStatus) {
+            for (const step of feature.backgroundSteps)
+                step.lastStatus = undefined;
+
+            for (const scenario of feature.scenarios)
+                for (const step of scenario.steps)
+                    step.lastStatus = undefined;
+        }
 
         const scenario = feature.scenarios[0];
         setCurrentScenario(scenario);
@@ -74,12 +88,24 @@ export function useFeaturePlayer(feature: IFeature) {
                         setCurrentStepId(feature.backgroundSteps[0].id);
                     else
                         setCurrentStepId(nextScenario.steps[0].id);
+                } else {
+                    reset(false);
                 }
             }
+
     }
 
     const runStep = async (stepId: number, autoAdvance?: boolean) => {
         const status = await postStep(currentScenario.id, stepId);
+        const step = getStepById(stepId);
+        step.lastStatus = status;
+
+        if (!isAutoplaying)
+            setIsPlaying(false);
+
+        if (status === TestStatus.Error) {
+
+        }
 
         if (autoAdvance)
             advance();
@@ -87,12 +113,31 @@ export function useFeaturePlayer(feature: IFeature) {
         return status;
     }
 
+    React.useEffect(() => {
+        let canPlay = true;
+
+        if (canPlay && (isPlaying || isAutoplaying))
+            runStep(currentStepId, true);
+
+        return () => { canPlay = false; }
+    }, [isPlaying, isAutoplaying, currentStepId]);
+
+    const stop = () => {
+        setIsAutoplaying(false);
+        setIsPlaying(false);
+    }
+
     return {
         currentScenario,
         currentStepId,
         setCurrentStepId,
         setCurrentScenario,
+        isPlaying,
+        setIsPlaying,
+        isAutoplaying,
+        setIsAutoplaying,
         runStep,
-        reset
+        reset,
+        stop
     };
 }
