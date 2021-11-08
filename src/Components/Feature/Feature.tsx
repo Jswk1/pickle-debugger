@@ -1,6 +1,7 @@
-import { faArrowRight, faCheck, faPlay, faSpinner, faStepForward, faStop } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faCheck, faFastForward, faPlay, faSpinner, faStepForward, faStop } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as React from "react";
+import { Controls } from "./Controls";
 import { useFeaturePlayer, useFeature, TFeaturePlayer } from "./FeaturePlayer";
 import { IScenario, IStep, StepType, TestStatus } from "./Types";
 
@@ -17,6 +18,7 @@ export const FeatureViewer = () => {
 
     return <>
         <div className="container-fluid pt-2 bg-dark h-100">
+            <Controls player={player} />
             <div className="row">
                 <div className="col-2">
                     <h6 className="text-light">Scenarios</h6>
@@ -32,27 +34,8 @@ export const FeatureViewer = () => {
                     </div>
                 </div>
             </div>
-            <Controls player={player} />
         </div>
     </>
-}
-
-const Controls = (props: { player: TFeaturePlayer }) => {
-    const { player } = props;
-    const canPlay = !player.isPlaying && !player.isAutoplaying;
-
-    return <div>
-        <button type="button" className="btn btn-lg btn-primary mx-1" onClick={() => player.setIsAutoplaying(true)} disabled={!canPlay}>
-            {!canPlay && <FontAwesomeIcon icon={faSpinner} spin={true} />}
-            {canPlay && <FontAwesomeIcon icon={faPlay} />}
-        </button>
-        <button type="button" className="btn btn-lg btn-primary mx-1" onClick={() => player.setIsPlaying(true)} disabled={!canPlay}>
-            <FontAwesomeIcon icon={faStepForward} />
-        </button>
-        <button type="button" className="btn btn-lg btn-primary mx-1" onClick={() => player.stop()} onDoubleClick={() => player.reset(true)}>
-            <FontAwesomeIcon icon={faStop} />
-        </button>
-    </div>
 }
 
 const ScenarioList = (props: { scenarios: IScenario[], activeScenario: IScenario, onScenarioClick: (scenario: IScenario) => void }) => {
