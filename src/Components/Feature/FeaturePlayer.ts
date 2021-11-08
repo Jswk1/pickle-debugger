@@ -5,20 +5,16 @@ import { IFeature, IScenario, IStep, StepType, TestStatus } from "./Types";
 
 export function useFeature() {
     const [feature, setFeature] = React.useState<IFeature>(null);
-    const [variables, setVariables] = React.useState<object>({});
 
     const loading = useAsync(async () => {
         const feature = await getFeature();
-        const variables = await getVariables();
 
-        setVariables(variables);
         setFeature(feature);
     });
 
     return {
         loading,
-        feature,
-        variables
+        feature
     };
 }
 
@@ -27,15 +23,16 @@ export type TFeaturePlayer = ReturnType<typeof useFeaturePlayer>;
 export function useFeaturePlayer(feature: IFeature) {
     const [currentScenario, setCurrentScenario] = React.useState<IScenario>(null);
     const [currentStepId, setCurrentStepId] = React.useState<number>(null);
-    const [isPlaying, setIsPlaying] = React.useState<boolean>(false);
-    const [isAutoplaying, setIsAutoplaying] = React.useState<boolean>(false);
+    const [isPlayingCurrentStep, setIsPlayingCurrentStep] = React.useState<boolean>(false);
+    const [isPlayingCurrentScenario, setIsPlayingCurrentScenario] = React.useState<boolean>(false);
+    const [isPlayingAll, setIsPlayingAll] = React.useState<boolean>(false);
+    const [variables, setVariables] = React.useState<object>({});
 
     const reset = (clearStatus: boolean) => {
         if (!feature)
             return;
 
-        setIsPlaying(false);
-        setIsAutoplaying(false);
+        stop();
 
         if (clearStatus) {
             for (const step of feature.backgroundSteps)
@@ -83,6 +80,10 @@ export function useFeaturePlayer(feature: IFeature) {
             else {
                 const nextScenario = feature.scenarios.find(e => e.id === currentScenario.nextScenarioId);
                 if (nextScenario) {
+
+                    if (isPlayingCurrentScenario)
+                        setIsPlayingCurrentScenario(false);
+
                     setCurrentScenario(nextScenario);
                     if (feature.backgroundSteps?.length > 0)
                         setCurrentStepId(feature.backgroundSteps[0].id);
@@ -100,8 +101,8 @@ export function useFeaturePlayer(feature: IFeature) {
         const step = getStepById(stepId);
         step.lastStatus = status;
 
-        if (!isAutoplaying)
-            setIsPlaying(false);
+        if (isPlayingCurrentStep)
+            setIsPlayingCurrentStep(false);
 
         if (status === TestStatus.Error)
             stop();
@@ -112,29 +113,38 @@ export function useFeaturePlayer(feature: IFeature) {
         return status;
     }
 
+    useAsync(async () => {
+        const variables = await getVariables();
+        setVariables(variables);
+    }, [currentStepId]);
+
     React.useEffect(() => {
         let canPlay = true;
 
-        if (canPlay && (isPlaying || isAutoplaying))
+        if (canPlay && (isPlayingCurrentStep || isPlayingCurrentScenario || isPlayingAll))
             runStep(currentStepId, true);
 
         return () => { canPlay = false; }
-    }, [isPlaying, isAutoplaying, currentStepId]);
+    }, [isPlayingCurrentStep, isPlayingCurrentScenario, isPlayingAll, currentStepId]);
 
     const stop = () => {
-        setIsAutoplaying(false);
-        setIsPlaying(false);
+        setIsPlayingAll(false);
+        setIsPlayingCurrentScenario(false);
+        setIsPlayingCurrentStep(false);
     }
 
     return {
+        variables,
         currentScenario,
         currentStepId,
         setCurrentStepId,
         setCurrentScenario,
-        isPlaying,
-        setIsPlaying,
-        isAutoplaying,
-        setIsAutoplaying,
+        isPlayingCurrentStep,
+        setIsPlayingCurrentStep,
+        isPlayingAll,
+        setIsPlayingAll,
+        isPlayingCurrentScenario,
+        setIsPlayingCurrentScenario,
         runStep,
         reset,
         stop
