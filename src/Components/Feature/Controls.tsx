@@ -1,6 +1,7 @@
 import { faSpinner, faPlay, faFastForward, faStepForward, faStop, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as React from "react";
+import { reloadScripts } from "./Data";
 import { TFeaturePlayer } from "./FeaturePlayer";
 
 export const Controls = (props: { player: TFeaturePlayer }) => {
@@ -13,6 +14,7 @@ export const Controls = (props: { player: TFeaturePlayer }) => {
         <ControlButton backgroundCss={"btn-light"} icon={faStepForward} onClick={() => player.setIsPlayingCurrentScenario(true)} onHover={e => setTooltip(e)} tooltip={"Run current scenario"} disabled={!canPlay} />
         <ControlButton backgroundCss={"btn-light"} icon={faFastForward} onClick={() => player.setIsPlayingAll(true)} onHover={e => setTooltip(e)} tooltip={"Run to end"} disabled={!canPlay} />
         <ControlButton backgroundCss={canPlay ? "btn-light" : "btn-warning"} icon={faStop} onClick={() => player.stop()} onHover={e => setTooltip(e)} tooltip={"Stop"} disabled={false} />
+        <button type="button" className="btn btn-light mx-1" onClick={() => reloadScripts()}>Reload Scripts</button>
 
         <small className="mx-1 text-muted">{tooltip}</small>
     </div>
@@ -27,7 +29,7 @@ const ControlButton = (props: {
     tooltip: string,
     disabled: boolean
 }) => <>
-        <button type="button" className={`btn btn-lg ${props.backgroundCss} mx-1`} disabled={props.disabled} onClick={props.onClick} onMouseEnter={() => props.onHover(props.tooltip)} onMouseLeave={() => props.onHover("")}>
+        <button type="button" className={`btn ${props.backgroundCss} mx-1`} disabled={props.disabled} onClick={props.onClick} onMouseEnter={() => props.onHover(props.tooltip)} onMouseLeave={() => props.onHover("")}>
             <FontAwesomeIcon icon={props.icon} spin={props.spinIcon} />
         </button>
     </>

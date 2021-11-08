@@ -23,3 +23,9 @@ export async function postStep(scenarioId: number, stepId: number): Promise<ISte
 
     return stepOutcome;
 }
+
+export async function reloadScripts(): Promise<void> {
+    await fetch("/api/reload", {
+        method: "POST"
+    });
+}
