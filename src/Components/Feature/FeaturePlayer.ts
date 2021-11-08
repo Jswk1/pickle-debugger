@@ -103,9 +103,8 @@ export function useFeaturePlayer(feature: IFeature) {
         if (!isAutoplaying)
             setIsPlaying(false);
 
-        if (status === TestStatus.Error) {
-
-        }
+        if (status === TestStatus.Error)
+            stop();
 
         if (autoAdvance)
             advance();

@@ -17,14 +17,14 @@ export const FeatureViewer = () => {
         return <div>Loading...</div>
 
     return <>
-        <div className="container-fluid pt-2 bg-dark h-100">
+        <div className="container-fluid pt-2 bg-dark flex-grow-1 overflow-auto d-flex flex-column">
             <Controls player={player} />
-            <div className="row">
+            <div className="row flex-grow-1 overflow-auto flex-nowrap">
                 <div className="col-2">
                     <h6 className="text-light">Scenarios</h6>
                     <ScenarioList scenarios={feature.scenarios} activeScenario={player.currentScenario} onScenarioClick={(scenario) => player.setCurrentScenario(scenario)} />
                 </div>
-                <div className="col">
+                <div className="col d-flex flex-column">
                     <StepList backgroundSteps={feature.backgroundSteps} scenario={player.currentScenario} currentStepId={player.currentStepId} onStepClick={(step) => player.setCurrentStepId(step.id)} />
                 </div>
                 <div className="col-2">
@@ -83,11 +83,13 @@ const StepList = (props: { scenario: IScenario, backgroundSteps: IStep[], curren
 
     return <>
         <h6 className="text-light">{scenario.name}</h6>
-        <table className="table table-dark table-sm table-bordered table-striped table-hover caption-top">
-            <tbody>
-                {backgroundSteps.map((e, i) => getStep(e, i))}
-                {scenario.steps.map((e, i) => getStep(e, i))}
-            </tbody>
-        </table>
+        <div className="flex-grow-1 overflow-auto">
+            <table className="table table-dark table-sm table-bordered table-striped table-hover caption-top">
+                <tbody>
+                    {backgroundSteps.map((e, i) => getStep(e, i))}
+                    {scenario.steps.map((e, i) => getStep(e, i))}
+                </tbody>
+            </table>
+        </div>
     </>
 }
