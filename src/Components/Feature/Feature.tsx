@@ -3,14 +3,18 @@ import { Controls } from "./Controls";
 import { useFeaturePlayer, useFeature, TFeaturePlayer } from "./FeaturePlayer";
 import { ScenarioList } from "./ScenarioList";
 import { StepList } from "./StepList";
+import { Variables } from "./Variables";
 
 export const FeatureViewer = () => {
     const { loading, feature } = useFeature();
+    const [refresh, setRefresh] = React.useState(0);
     const player = useFeaturePlayer(feature);
 
     React.useEffect(() => {
         player.reset(true);
     }, [feature]);
+
+    React.useEffect(() => { }, [refresh]);
 
     if (loading)
         return <div>Loading...</div>
@@ -24,13 +28,15 @@ export const FeatureViewer = () => {
                     <ScenarioList scenarios={feature.scenarios} activeScenario={player.currentScenario} onScenarioClick={(scenario) => player.setCurrentScenario(scenario)} />
                 </div>
                 <div className="col d-flex flex-column">
-                    <StepList backgroundSteps={feature.backgroundSteps} scenario={player.currentScenario} currentStepId={player.currentStepId} onStepClick={(step) => player.setCurrentStepId(step.id)} />
+                    <StepList backgroundSteps={feature.backgroundSteps} scenario={player.currentScenario} currentStepId={player.currentStepId}
+                        onStepClick={(step) => player.setCurrentStepId(step.id)} onStepBreakpointClick={step => {
+                            step.breakpoint = !(!!step.breakpoint);
+                            setRefresh(refresh + 1);
+                        }} />
                 </div>
                 <div className="col-2">
                     <h6>Variables</h6>
-                    <div>
-                        {JSON.stringify(player.variables)}
-                    </div>
+                    <Variables variables={player.variables} />
                 </div>
             </div>
         </div>

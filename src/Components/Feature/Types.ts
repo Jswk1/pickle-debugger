@@ -24,11 +24,18 @@ export enum TestStatus {
     Skipped = 8
 }
 
+export interface IStepOutcome {
+    status: TestStatus;
+    error?: string;
+}
+
 export interface IStep {
     id: number;
     name: string;
     type: StepType;
-    lastStatus: TestStatus;
 
+    outcome?: IStepOutcome;
+
+    breakpoint?: boolean;
     nextStepId?: number;
 }

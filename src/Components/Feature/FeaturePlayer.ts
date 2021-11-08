@@ -14,7 +14,8 @@ export function useFeature() {
 
     return {
         loading,
-        feature
+        feature,
+        setFeature
     };
 }
 
@@ -36,11 +37,11 @@ export function useFeaturePlayer(feature: IFeature) {
 
         if (clearStatus) {
             for (const step of feature.backgroundSteps)
-                step.lastStatus = undefined;
+                delete step.outcome;
 
             for (const scenario of feature.scenarios)
                 for (const step of scenario.steps)
-                    step.lastStatus = undefined;
+                    delete step.outcome;
         }
 
         const scenario = feature.scenarios[0];
@@ -72,45 +73,55 @@ export function useFeaturePlayer(feature: IFeature) {
     const advance = () => {
         const step = getStepById(currentStepId);
 
+        const setNextStep = (stepId: number) => {
+            setCurrentStepId(stepId);
+
+            const nextStep = getStepById(stepId);
+            if (nextStep.breakpoint)
+                stop();
+        }
+
         if (step.nextStepId)
-            setCurrentStepId(step.nextStepId);
+            setNextStep(step.nextStepId);
         else
             if (step.type === StepType.Background)
-                setCurrentStepId(currentScenario.steps[0].id);
+                setNextStep(currentScenario.steps[0].id);
             else {
                 const nextScenario = feature.scenarios.find(e => e.id === currentScenario.nextScenarioId);
                 if (nextScenario) {
 
-                    if (isPlayingCurrentScenario)
+                    if (isPlayingCurrentScenario) {
                         setIsPlayingCurrentScenario(false);
+                        stop();
+                        return;
+                    }
 
                     setCurrentScenario(nextScenario);
                     if (feature.backgroundSteps?.length > 0)
-                        setCurrentStepId(feature.backgroundSteps[0].id);
+                        setNextStep(feature.backgroundSteps[0].id);
                     else
-                        setCurrentStepId(nextScenario.steps[0].id);
-                } else {
-                    reset(false);
-                }
+                        setNextStep(nextScenario.steps[0].id);
+                } else
+                    stop();
             }
-
     }
 
     const runStep = async (stepId: number, autoAdvance?: boolean) => {
-        const status = await postStep(currentScenario.id, stepId);
+        const outcome = await postStep(currentScenario.id, stepId);
         const step = getStepById(stepId);
-        step.lastStatus = status;
+
+        step.outcome = outcome;
 
         if (isPlayingCurrentStep)
             setIsPlayingCurrentStep(false);
 
-        if (status === TestStatus.Error)
+        if (outcome.status === TestStatus.Error)
             stop();
+        else
+            if (autoAdvance)
+                advance();
 
-        if (autoAdvance)
-            advance();
-
-        return status;
+        return outcome;
     }
 
     useAsync(async () => {
