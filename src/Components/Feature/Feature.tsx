@@ -24,7 +24,7 @@ export const FeatureViewer = () => {
             <Controls player={player} />
             <div className="row flex-grow-1 overflow-auto flex-nowrap">
                 <Column title="Scenarios" borderClass="border-primary" columnCss="col-2">
-                    <ScenarioList scenarios={feature.scenarios} activeScenario={player.currentScenario} onScenarioClick={(scenario) => player.setCurrentScenario(scenario)} />
+                    <ScenarioList feature={feature} activeScenario={player.currentScenario} onScenarioClick={(scenario) => player.setCurrentScenario(scenario)} />
                 </Column>
                 <Column title={player.currentScenario.name} borderClass="border-success" columnCss="col d-flex flex-column">
                     <StepList backgroundSteps={feature.backgroundSteps} scenario={player.currentScenario} currentStepId={player.currentStepId}
