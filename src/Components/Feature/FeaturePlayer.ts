@@ -33,7 +33,7 @@ export function useFeaturePlayer(feature: IFeature) {
         if (!feature)
             return;
 
-        stop();
+        pause();
 
         if (clearStatus) {
             for (const step of feature.backgroundSteps)
@@ -78,7 +78,7 @@ export function useFeaturePlayer(feature: IFeature) {
 
             const nextStep = getStepById(stepId);
             if (nextStep.breakpoint)
-                stop();
+                pause();
         }
 
         if (step.nextStepId)
@@ -92,7 +92,7 @@ export function useFeaturePlayer(feature: IFeature) {
 
                     if (isPlayingCurrentScenario) {
                         setIsPlayingCurrentScenario(false);
-                        stop();
+                        pause();
                         return;
                     }
 
@@ -102,7 +102,7 @@ export function useFeaturePlayer(feature: IFeature) {
                     else
                         setNextStep(nextScenario.steps[0].id);
                 } else
-                    stop();
+                    pause();
             }
     }
 
@@ -116,7 +116,7 @@ export function useFeaturePlayer(feature: IFeature) {
             setIsPlayingCurrentStep(false);
 
         if (outcome.status === TestStatus.Error)
-            stop();
+            pause();
         else
             if (autoAdvance)
                 advance();
@@ -138,7 +138,7 @@ export function useFeaturePlayer(feature: IFeature) {
         return () => { canPlay = false; }
     }, [isPlayingCurrentStep, isPlayingCurrentScenario, isPlayingAll, currentStepId]);
 
-    const stop = () => {
+    const pause = () => {
         setIsPlayingAll(false);
         setIsPlayingCurrentScenario(false);
         setIsPlayingCurrentStep(false);
@@ -158,6 +158,6 @@ export function useFeaturePlayer(feature: IFeature) {
         setIsPlayingCurrentScenario,
         runStep,
         reset,
-        stop
+        pause
     };
 }

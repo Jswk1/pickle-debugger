@@ -1,4 +1,4 @@
-import { faSpinner, faPlay, faFastForward, faStepForward, faStop, IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { faSpinner, faPlay, faFastForward, faStepForward, faStop, IconDefinition, faPause } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as React from "react";
 import { reloadScripts } from "./Data";
@@ -10,10 +10,11 @@ export const Controls = (props: { player: TFeaturePlayer }) => {
     const [tooltip, setTooltip] = React.useState("");
 
     return <div className="mb-2">
-        <ControlButton backgroundCss={canPlay ? "btn-light" : "btn-success"} icon={canPlay ? faPlay : faSpinner} spinIcon={!canPlay} onClick={() => player.setIsPlayingCurrentStep(true)} onHover={e => setTooltip(e)} tooltip={"Run current step"} disabled={!canPlay} />
-        <ControlButton backgroundCss={"btn-light"} icon={faStepForward} onClick={() => player.setIsPlayingCurrentScenario(true)} onHover={e => setTooltip(e)} tooltip={"Run current scenario"} disabled={!canPlay} />
-        <ControlButton backgroundCss={"btn-light"} icon={faFastForward} onClick={() => player.setIsPlayingAll(true)} onHover={e => setTooltip(e)} tooltip={"Run to end"} disabled={!canPlay} />
-        <ControlButton backgroundCss={canPlay ? "btn-light" : "btn-warning"} icon={faStop} onClick={() => player.stop()} onHover={e => setTooltip(e)} tooltip={"Stop"} disabled={false} />
+        <ControlButton backgroundCss={"btn-success"} icon={canPlay ? faPlay : faSpinner} spinIcon={!canPlay} onClick={() => player.setIsPlayingCurrentStep(true)} onHover={e => setTooltip(e)} tooltip={"Run step"} disabled={!canPlay} />
+        <ControlButton backgroundCss={"btn-success"} icon={faStepForward} onClick={() => player.setIsPlayingCurrentScenario(true)} onHover={e => setTooltip(e)} tooltip={"Run scenario"} disabled={!canPlay} />
+        <ControlButton backgroundCss={"btn-success"} icon={faFastForward} onClick={() => player.setIsPlayingAll(true)} onHover={e => setTooltip(e)} tooltip={"Run feature"} disabled={!canPlay} />
+        <ControlButton backgroundCss={"btn-warning"} icon={faPause} onClick={() => player.pause()} onHover={e => setTooltip(e)} tooltip={"Pause after current step"} disabled={false} />
+        <ControlButton backgroundCss={"btn-danger"} icon={faStop} onClick={() => player.reset(true)} onHover={e => setTooltip(e)} tooltip={"Reset to start"} disabled={false} />
         <button type="button" className="btn btn-light mx-1" onClick={() => reloadScripts()}>Reload Scripts</button>
 
         <small className="mx-1 text-muted">{tooltip}</small>

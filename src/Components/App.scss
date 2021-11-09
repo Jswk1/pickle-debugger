@@ -9,3 +9,8 @@
 .action:hover {
     cursor: pointer;
 }
+
+.text-vertical {
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+}

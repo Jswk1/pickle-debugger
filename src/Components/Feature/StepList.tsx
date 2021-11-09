@@ -37,7 +37,6 @@ export const StepList = (props: { scenario: IScenario, backgroundSteps: IStep[],
     }
 
     return <>
-        <h6>{scenario.name}</h6>
         <div className="flex-grow-1 overflow-auto">
             <table className="table w-auto table-dark table-sm table-bordered table-striped table-hover caption-top">
                 <tbody>
