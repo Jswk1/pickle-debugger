@@ -1,7 +1,8 @@
-import { faArrowRight, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faArrowRight, faCircle, faCopy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as React from "react";
 import { IScenario, IStep, TestStatus, StepType } from "../../Types";
+import { copyToClipboard } from "../../Utils/Clipboard";
 
 export const StepList = (props: { scenario: IScenario, backgroundSteps: IStep[], currentStepId: number, onStepClick: (step: IStep) => void, onStepBreakpointClick: (step: IStep) => void }) => {
     const { scenario, backgroundSteps, currentStepId, onStepClick, onStepBreakpointClick } = props;
@@ -33,8 +34,7 @@ export const StepList = (props: { scenario: IScenario, backgroundSteps: IStep[],
                 {step.id === currentStepId && <FontAwesomeIcon icon={faArrowRight} />}
             </td>
             <td onClick={() => onStepClick(step)} className={"w-100 action " + getRowColor()}>
-                <div>{step.name}</div>
-                {step.outcome?.error && <pre>{step.outcome?.error}</pre>}
+                <Step step={step} />
             </td>
         </tr>
     }
@@ -54,5 +54,26 @@ export const StepList = (props: { scenario: IScenario, backgroundSteps: IStep[],
                 </tbody>
             </table>
         </div>
+    </>
+}
+
+const Step = (props: { step: IStep }) => {
+    const { step } = props;
+
+    const [copyVisible, setCopyVisible] = React.useState(false);
+
+    const parts = /(when|then|and|given)(.*)/i.exec(step.name);
+    const keyword = parts[1].trim();
+    const shouldIdent = keyword.toLowerCase() === "and";
+    const stepName = parts[2].trim();
+
+    return <>
+        <div className="d-flex align-items-center" onMouseEnter={() => setCopyVisible(true)} onMouseLeave={() => setCopyVisible(false)}>
+            {shouldIdent && <div style={{ minWidth: 25 }}></div>}
+            <span className="text-primary">{keyword}</span>&nbsp;
+            <span className="me-2">{stepName}</span>
+            {copyVisible && <FontAwesomeIcon icon={faCopy} className="text-light" title={"Copy step definition"} onClick={() => copyToClipboard(step.definition.pattern)} />}
+        </div>
+        {step.outcome?.error && <pre>{step.outcome?.error}</pre>}
     </>
 }

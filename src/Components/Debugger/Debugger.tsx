@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useFeature } from "../../Hooks/UseFeature";
 import { useFeaturePlayer } from "../../Hooks/UseFeaturePlayer";
+import { IScenario } from "../../Types";
 import { Column } from "../UI/Column";
 import { Controls } from "./Controls";
 import { ScenarioList } from "./ScenarioList";
@@ -18,6 +19,17 @@ export const Debugger = () => {
 
     React.useEffect(() => { }, [refresh]);
 
+    const onScenarioClick = (scenario: IScenario) => {
+        if (scenario.id === player.currentScenario.id)
+            return;
+
+        player.setCurrentScenario(scenario);
+        if (feature.backgroundSteps?.length > 0)
+            player.setCurrentStepId(feature.backgroundSteps[0].id);
+        else
+            player.setCurrentStepId(scenario.steps[0].id);
+    };
+
     if (loading)
         return <div>Loading...</div>
 
@@ -26,7 +38,7 @@ export const Debugger = () => {
             <Controls player={player} />
             <div className="row flex-grow-1 overflow-auto flex-nowrap">
                 <Column title="Scenarios" borderClass="border-primary" columnCss="col-2">
-                    <ScenarioList feature={feature} activeScenario={player.currentScenario} onScenarioClick={(scenario) => player.setCurrentScenario(scenario)} />
+                    <ScenarioList feature={feature} activeScenario={player.currentScenario} onScenarioClick={onScenarioClick} />
                 </Column>
                 <Column title={player.currentScenario.name} borderClass="border-success" columnCss="col d-flex flex-column">
                     <StepList backgroundSteps={feature.backgroundSteps} scenario={player.currentScenario} currentStepId={player.currentStepId}

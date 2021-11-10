@@ -29,10 +29,23 @@ export interface IStepOutcome {
     error?: string;
 }
 
+export interface IStepDefinition {
+    expression: {
+        regexp: RegExp;
+    }
+
+    options: {
+        timeoutMS: number;
+    }
+
+    pattern: string;
+}
+
 export interface IStep {
     id: number;
     name: string;
     type: StepType;
+    definition: IStepDefinition;
 
     outcome?: IStepOutcome;
 

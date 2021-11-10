@@ -7,12 +7,11 @@ export async function getFeature(): Promise<IFeature> {
     const feature = JSON.parse(json, (k, v) => {
         const m = /__REGEXP(.*)/.exec(v);
         if (m?.length > 0)
-            return new RegExp(m[1]);
+            return new RegExp(m[1].substring(1, m[1].length - 1));
 
         return v;
     });
 
-    console.log("@feature", feature);
     return feature;
 }
 
