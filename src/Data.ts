@@ -1,4 +1,4 @@
-import { IFeature, IStepOutcome, TestStatus } from "./Types";
+import { IFeature, IStepOutcome, TestStatus, TVariables } from "./Types";
 
 export async function getFeature(): Promise<IFeature> {
     const res = await fetch("/api/feature");
@@ -7,14 +7,14 @@ export async function getFeature(): Promise<IFeature> {
     return feature;
 }
 
-export async function getVariables(): Promise<object> {
+export async function getVariables(): Promise<TVariables> {
     const res = await fetch("/api/feature/variables");
     const variables = await res.json();
 
     return variables;
 }
 
-export async function postVariables(newVariables: {}): Promise<object> {
+export async function postVariables(newVariables: {}): Promise<TVariables> {
     const res = await fetch("/api/feature/variables", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

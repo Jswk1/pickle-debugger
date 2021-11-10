@@ -39,3 +39,5 @@ export interface IStep {
     breakpoint?: boolean;
     nextStepId?: number;
 }
+
+export type TVariables = { [key: string]: any };
