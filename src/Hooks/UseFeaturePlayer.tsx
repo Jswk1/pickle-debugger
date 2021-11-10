@@ -1,5 +1,5 @@
 import * as React from "react";
-import { postStep, getVariables } from "../Data";
+import { postStep, getVariables, postVariables } from "../Data";
 import { IFeature, IScenario, StepType, TestStatus } from "../Types";
 import { useAsync } from "./UseAsync";
 
@@ -128,8 +128,14 @@ export function useFeaturePlayer(feature: IFeature) {
         setIsPlayingCurrentStep(false);
     }
 
+    const updateVariables = async (newVariables: {}) => {
+        const variables = await postVariables(newVariables);
+        setVariables(variables);
+    }
+
     return {
         variables,
+        updateVariables,
         currentScenario,
         currentStepId,
         setCurrentStepId,

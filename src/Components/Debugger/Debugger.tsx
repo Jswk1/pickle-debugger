@@ -36,7 +36,7 @@ export const Debugger = () => {
                         }} />
                 </Column>
                 <Column title="Variables" borderClass="border-warning" columnCss="col-2">
-                    <Variables variables={player.variables} />
+                    <Variables variables={player.variables} updateVariables={player.updateVariables} />
                 </Column>
             </div>
         </div>

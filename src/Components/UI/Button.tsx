@@ -12,7 +12,10 @@ export const Button = (props: React.PropsWithChildren<{
     text?: string,
     disabled?: boolean
 }>) => <>
-        <button type="button" className={`btn ${props.class} mx-1`} disabled={props.disabled} onClick={props.onClick} onMouseEnter={() => props.onHover(props.tooltip)} onMouseLeave={() => props.onHover("")}>
+        <button type="button" className={`btn ${props.class} mx-1`} disabled={props.disabled}
+            onClick={props.onClick}
+            onMouseEnter={() => props.onHover && props.onHover(props.tooltip)}
+            onMouseLeave={() => props.onHover && props.onHover("")}>
             <FontAwesomeIcon fixedWidth={true} icon={props.icon} spin={props.spinIcon} />
             {props.children && <span className="ms-1">{props.children}</span>}
         </button>

@@ -14,6 +14,18 @@ export async function getVariables(): Promise<object> {
     return variables;
 }
 
+export async function postVariables(newVariables: {}): Promise<object> {
+    const res = await fetch("/api/feature/variables", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ variables: newVariables })
+    });
+
+    const variables = await res.json();
+
+    return variables;
+}
+
 export async function postStep(scenarioId: number, stepId: number): Promise<IStepOutcome> {
     const res = await fetch(`/api/scenario/${scenarioId}/step/${stepId}`, {
         method: "POST"
