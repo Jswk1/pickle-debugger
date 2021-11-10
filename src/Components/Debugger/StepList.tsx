@@ -9,6 +9,12 @@ export const StepList = (props: { scenario: IScenario, backgroundSteps: IStep[],
     if (!scenario)
         return null;
 
+    React.useLayoutEffect(() => {
+        const el = document.querySelector(`[step-id="${currentStepId}"]`);
+        if (el)
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, [currentStepId]);
+
     const getStep = (step: IStep, key: any) => {
         const getRowColor = () => {
             switch (step.outcome?.status) {
@@ -19,15 +25,12 @@ export const StepList = (props: { scenario: IScenario, backgroundSteps: IStep[],
             }
         }
 
-        return <tr key={key}>
+        return <tr key={key} step-id={step.id}>
             <td onClick={() => onStepBreakpointClick(step)} className="action">
                 <span className={`${step.breakpoint ? "text-danger" : ""}`}><FontAwesomeIcon icon={faCircle} /></span>
             </td>
-            <td>
+            <td style={{ minWidth: "25px" }}>
                 {step.id === currentStepId && <FontAwesomeIcon icon={faArrowRight} />}
-            </td>
-            <td>
-                {step.type === StepType.Background ? <span className="text-primary">BG</span> : <span className="text-light">SC</span>}
             </td>
             <td onClick={() => onStepClick(step)} className={"w-100 action " + getRowColor()}>
                 <div>{step.name}</div>
@@ -39,8 +42,14 @@ export const StepList = (props: { scenario: IScenario, backgroundSteps: IStep[],
     return <>
         <div className="flex-grow-1 overflow-auto">
             <table className="table w-auto table-dark table-sm table-bordered table-striped table-hover caption-top">
+                <caption>Background Steps</caption>
                 <tbody>
                     {backgroundSteps.map((e, i) => getStep(e, i))}
+                </tbody>
+            </table>
+            <table className="table w-auto table-dark table-sm table-bordered table-striped table-hover caption-top">
+                <caption>Scenario Steps</caption>
+                <tbody>
                     {scenario.steps.map((e, i) => getStep(e, i))}
                 </tbody>
             </table>
