@@ -46,14 +46,14 @@ export const Variables = (props: { variables: TVariables, updateVariables: (newV
                 <thead>
                     <tr>
                         <th>Key</th>
-                        <th>Value</th>
+                        <th className="w-100">Value</th>
                     </tr>
                 </thead>
                 <tbody>
                     {Object.keys(variables).map(k => {
                         return <tr key={k}>
                             <td className={changedKeys.includes(k) ? "text-success" : ""}>{k}</td>
-                            <td className="w-100">{JSON.stringify(variables[k])}</td>
+                            <td className="w-100">{typeof variables[k] === "object" ? JSON.stringify(variables[k]) : variables[k]}</td>
                         </tr>
                     })}
                 </tbody>

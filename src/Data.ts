@@ -2,8 +2,17 @@ import { IFeature, IStepOutcome, TestStatus, TVariables } from "./Types";
 
 export async function getFeature(): Promise<IFeature> {
     const res = await fetch("/api/feature");
-    const feature = await res.json();
+    const json = await res.text();
 
+    const feature = JSON.parse(json, (k, v) => {
+        const m = /__REGEXP(.*)/.exec(v);
+        if (m?.length > 0)
+            return new RegExp(m[1]);
+
+        return v;
+    });
+
+    console.log("@feature", feature);
     return feature;
 }
 
