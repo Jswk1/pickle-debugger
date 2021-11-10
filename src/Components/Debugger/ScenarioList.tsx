@@ -1,4 +1,4 @@
-import { IFeature, IScenario, TestStatus } from "./Types";
+import { IFeature, IScenario, TestStatus } from "../../Types";
 import * as React from "react";
 
 export const ScenarioList = (props: { feature: IFeature, activeScenario: IScenario, onScenarioClick: (scenario: IScenario) => void }) => {

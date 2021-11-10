@@ -1,7 +1,7 @@
 import { faArrowRight, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as React from "react";
-import { IScenario, IStep, TestStatus, StepType } from "./Types";
+import { IScenario, IStep, TestStatus, StepType } from "../../Types";
 
 export const StepList = (props: { scenario: IScenario, backgroundSteps: IStep[], currentStepId: number, onStepClick: (step: IStep) => void, onStepBreakpointClick: (step: IStep) => void }) => {
     const { scenario, backgroundSteps, currentStepId, onStepClick, onStepBreakpointClick } = props;

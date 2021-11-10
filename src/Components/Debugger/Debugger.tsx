@@ -1,11 +1,13 @@
 import * as React from "react";
+import { useFeature } from "../../Hooks/UseFeature";
+import { useFeaturePlayer } from "../../Hooks/UseFeaturePlayer";
+import { Column } from "../UI/Column";
 import { Controls } from "./Controls";
-import { useFeaturePlayer, useFeature, TFeaturePlayer } from "./FeaturePlayer";
 import { ScenarioList } from "./ScenarioList";
 import { StepList } from "./StepList";
 import { Variables } from "./Variables";
 
-export const FeatureViewer = () => {
+export const Debugger = () => {
     const { loading, feature } = useFeature();
     const [refresh, setRefresh] = React.useState(0);
     const player = useFeaturePlayer(feature);
@@ -39,18 +41,4 @@ export const FeatureViewer = () => {
             </div>
         </div>
     </>
-}
-
-const Column = (props: React.PropsWithChildren<{ title: string, borderClass: string, columnCss: string, collapsed?: boolean }>) => {
-    const [collapsed, setCollapsed] = React.useState(props.collapsed || false);
-
-    const toggleCollapsed = () => setCollapsed(!collapsed);
-
-    if (collapsed)
-        return <h6 onClick={toggleCollapsed} className={`action text-vertical col flex-shrink-1 flex-grow-0 m-0 p-1 border border-1 ${props.borderClass}`}>{props.title}</h6>
-
-    return <div className={props.columnCss}>
-        <h6 className="action" onClick={toggleCollapsed}>{props.title}</h6>
-        {props.children}
-    </div>
 }

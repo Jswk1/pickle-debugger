@@ -1,23 +1,7 @@
 import * as React from "react";
-import { useAsync } from "../../Hooks/UseAsync";
-import { getFeature, getVariables, postStep } from "./Data";
-import { IFeature, IScenario, IStep, StepType, TestStatus } from "./Types";
-
-export function useFeature() {
-    const [feature, setFeature] = React.useState<IFeature>(null);
-
-    const loading = useAsync(async () => {
-        const feature = await getFeature();
-
-        setFeature(feature);
-    });
-
-    return {
-        loading,
-        feature,
-        setFeature
-    };
-}
+import { postStep, getVariables } from "../Data";
+import { IFeature, IScenario, StepType, TestStatus } from "../Types";
+import { useAsync } from "./UseAsync";
 
 export type TFeaturePlayer = ReturnType<typeof useFeaturePlayer>;
 
