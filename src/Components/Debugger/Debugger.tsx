@@ -2,6 +2,7 @@ import * as React from "react";
 import { useFeature } from "../../Hooks/UseFeature";
 import { useFeaturePlayer } from "../../Hooks/UseFeaturePlayer";
 import { IScenario, IStep } from "../../Types";
+import { Context } from "../App";
 import { Column } from "../UI/Column";
 import { Controls } from "./Controls";
 import { ScenarioList } from "./ScenarioList";
@@ -10,11 +11,14 @@ import { Variables } from "./Variables";
 
 export const Debugger = () => {
     const { loading, feature, setFeature } = useFeature();
+    const { setTitle } = React.useContext(Context);
     const player = useFeaturePlayer(feature, setFeature);
 
     React.useEffect(() => {
-        if (!loading)
+        if (!loading) {
+            setTitle(feature.name);
             player.reset(true);
+        }
     }, [loading]);
 
     const onScenarioClick = (scenario: IScenario) => {
@@ -55,10 +59,10 @@ export const Debugger = () => {
         <div className="container-fluid pt-2 bg-dark text-light flex-grow-1 overflow-auto d-flex flex-column">
             <Controls player={player} />
             <div className="row flex-grow-1 overflow-auto flex-nowrap">
-                <Column title="Scenarios" borderClass="border-primary" columnCss="col-2">
+                <Column title="Scenarios" borderClass="border-primary" columnCss="col">
                     <ScenarioList feature={feature} currentScenarioId={player.currentScenarioId} onScenarioClick={onScenarioClick} />
                 </Column>
-                <Column title={currentScenario?.name} borderClass="border-success" columnCss="col d-flex flex-column">
+                <Column title={currentScenario?.name} borderClass="border-success" columnCss="col-8 d-flex flex-column">
                     <div className="flex-grow-1 overflow-auto">
                         {feature.backgroundSteps?.length > 0 &&
                             <StepList title={"Background Steps"} steps={feature.backgroundSteps} currentStepId={player.currentStepId}
@@ -70,7 +74,7 @@ export const Debugger = () => {
                         }
                     </div>
                 </Column>
-                <Column title="Variables" borderClass="border-warning" columnCss="col-2">
+                <Column title="Variables" borderClass="border-warning" columnCss="col">
                     <Variables variables={player.variables} updateVariables={player.updateVariables} />
                 </Column>
             </div>

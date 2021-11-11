@@ -1,9 +1,14 @@
 import * as React from "react";
+import { Context } from "./App";
 
 export const Head = () => {
+    const { title } = React.useContext(Context);
+
     return <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
-            <a className="navbar-brand" href="#">Pickle Debugger</a>
+            <h3 className="navbar-brand user-select-none">
+                Pickle Debugger - {title} <small className="text-muted">Feature</small>
+            </h3>
         </div>
     </nav>
 }
