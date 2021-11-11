@@ -1,35 +1,43 @@
 import * as React from "react";
 import { postStep, getVariables, postVariables } from "../Data";
-import { IFeature, IScenario, StepType, TestStatus } from "../Types";
+import { IFeature, IScenario, IStep, StepType, TestStatus } from "../Types";
 import { useAsync } from "./UseAsync";
 
 export type TFeaturePlayer = ReturnType<typeof useFeaturePlayer>;
 
-export function useFeaturePlayer(feature: IFeature) {
-    const [currentScenario, setCurrentScenario] = React.useState<IScenario>(null);
+export function useFeaturePlayer(feature: IFeature, setFeature: React.Dispatch<React.SetStateAction<IFeature>>) {
+    const [currentScenarioId, setCurrentScenarioId] = React.useState<number>(null);
     const [currentStepId, setCurrentStepId] = React.useState<number>(null);
     const [isPlayingCurrentStep, setIsPlayingCurrentStep] = React.useState<boolean>(false);
     const [isPlayingCurrentScenario, setIsPlayingCurrentScenario] = React.useState<boolean>(false);
     const [isPlayingAll, setIsPlayingAll] = React.useState<boolean>(false);
     const [variables, setVariables] = React.useState<object>({});
 
-    const reset = (clearStatus: boolean) => {
-        if (!feature)
-            return;
+    const getCurrentScenario = () => feature.scenarios.find(e => e.id === currentScenarioId);
 
+    const reset = (clearStatus: boolean) => {
         pause();
 
         if (clearStatus) {
-            for (const step of feature.backgroundSteps)
-                delete step.outcome;
+            const mapStep = (e: IStep): IStep => {
+                const { outcome, ...step } = e;
+                return step;
+            }
 
-            for (const scenario of feature.scenarios)
-                for (const step of scenario.steps)
-                    delete step.outcome;
+            setFeature({
+                ...feature,
+                backgroundSteps: feature.backgroundSteps.map(mapStep),
+                scenarios: feature.scenarios.map(e => ({
+                    ...e,
+                    steps: e.steps.map(mapStep)
+                }))
+            });
+
+            updateVariables({});
         }
 
         const scenario = feature.scenarios[0];
-        setCurrentScenario(scenario);
+        setCurrentScenarioId(scenario.id);
 
         if (feature.backgroundSteps?.length > 0)
             setCurrentStepId(feature.backgroundSteps[0].id);
@@ -56,6 +64,7 @@ export function useFeaturePlayer(feature: IFeature) {
 
     const advance = () => {
         const step = getStepById(currentStepId);
+        const currentScenario = getCurrentScenario();
 
         const setNextStep = (stepId: number) => {
             setCurrentStepId(stepId);
@@ -80,7 +89,7 @@ export function useFeaturePlayer(feature: IFeature) {
                         return;
                     }
 
-                    setCurrentScenario(nextScenario);
+                    setCurrentScenarioId(nextScenario.id);
                     if (feature.backgroundSteps?.length > 0)
                         setNextStep(feature.backgroundSteps[0].id);
                     else
@@ -91,6 +100,7 @@ export function useFeaturePlayer(feature: IFeature) {
     }
 
     const runStep = async (stepId: number, autoAdvance?: boolean) => {
+        const currentScenario = getCurrentScenario();
         const outcome = await postStep(currentScenario.id, stepId);
         const step = getStepById(stepId);
 
@@ -136,10 +146,11 @@ export function useFeaturePlayer(feature: IFeature) {
     return {
         variables,
         updateVariables,
-        currentScenario,
+        currentScenarioId,
+        getCurrentScenario,
+        setCurrentScenarioId,
         currentStepId,
         setCurrentStepId,
-        setCurrentScenario,
         isPlayingCurrentStep,
         setIsPlayingCurrentStep,
         isPlayingAll,

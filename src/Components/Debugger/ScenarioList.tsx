@@ -1,8 +1,8 @@
 import { IFeature, IScenario, TestStatus } from "../../Types";
 import * as React from "react";
 
-export const ScenarioList = (props: { feature: IFeature, activeScenario: IScenario, onScenarioClick: (scenario: IScenario) => void }) => {
-    const { feature, activeScenario, onScenarioClick } = props;
+export const ScenarioList = (props: { feature: IFeature, currentScenarioId: number, onScenarioClick: (scenario: IScenario) => void }) => {
+    const { feature, currentScenarioId, onScenarioClick } = props;
 
     const listItem = (scenario: IScenario, key: number) => {
         const getStatusBackground = () => {
@@ -31,7 +31,7 @@ export const ScenarioList = (props: { feature: IFeature, activeScenario: IScenar
             return okCount === steps.length ? "bg-success" : "bg-dark";
         }
 
-        const isActive = scenario.name === activeScenario?.name;
+        const isActive = scenario.id === currentScenarioId;
 
         return <a key={key} href="#" onClick={() => onScenarioClick(scenario)} className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${isActive ? "fw-bold" : ""}`}>
             {scenario.name}
