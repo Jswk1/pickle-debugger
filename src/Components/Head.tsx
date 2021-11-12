@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Context } from "./App";
+import { TitleContext } from "./App";
 
 export const Head = () => {
-    const { title } = React.useContext(Context);
+    const { title } = React.useContext(TitleContext);
 
     return <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">

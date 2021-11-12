@@ -2,6 +2,7 @@ import { faArrowRight, faCircle, faCopy } from "@fortawesome/free-solid-svg-icon
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import * as React from "react";
 import { IStep, TestStatus } from "../../Types";
+import { capitalize } from "../../Utils/Capitalize";
 import { copyToClipboard } from "../../Utils/Clipboard";
 import "./StepList.scss";
 
@@ -51,17 +52,13 @@ const Step = (props: { step: IStep }) => {
     const { step } = props;
 
     const [copyVisible, setCopyVisible] = React.useState(false);
-
-    const parts = /(when|then|and|given)(.*)/i.exec(step.name);
-    const keyword = parts[1].trim();
-    const shouldIdent = keyword.toLowerCase() === "and";
-    const stepName = parts[2].trim();
+    const shouldIdent = step.keyword === "and";
 
     return <>
         <div className="d-flex align-items-center" onMouseEnter={() => setCopyVisible(true)} onMouseLeave={() => setCopyVisible(false)}>
             {shouldIdent && <div className="icon-cell"></div>}
-            <span className="text-primary">{keyword}</span>&nbsp;
-            <span className="me-2">{stepName}</span>
+            <span className="text-primary">{capitalize(step.keyword)}</span>&nbsp;
+            <span className="me-2">{step.name}</span>
             {copyVisible && <FontAwesomeIcon icon={faCopy} className="text-light" title={"Copy step definition"} onClick={() => copyToClipboard(step.definition.pattern)} />}
         </div>
         {step.outcome?.error && <pre>{step.outcome?.error}</pre>}

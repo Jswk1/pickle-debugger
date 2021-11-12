@@ -43,6 +43,7 @@ export interface IStepDefinition {
 
 export interface IStep {
     id: number;
+    keyword: "given" | "when" | "then" | "and" | "but";
     name: string;
     type: StepType;
     definition: IStepDefinition;

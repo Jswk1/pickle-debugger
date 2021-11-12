@@ -1,8 +1,9 @@
 import * as React from "react";
 import { useFeature } from "../../Hooks/UseFeature";
 import { useFeaturePlayer } from "../../Hooks/UseFeaturePlayer";
+import { useNotification } from "../../Hooks/UseNotification";
 import { IScenario, IStep } from "../../Types";
-import { Context } from "../App";
+import { TitleContext } from "../App";
 import { Column } from "../UI/Column";
 import { Controls } from "./Controls";
 import { ScenarioList } from "./ScenarioList";
@@ -11,7 +12,7 @@ import { Variables } from "./Variables";
 
 export const Debugger = () => {
     const { loading, feature, setFeature } = useFeature();
-    const { setTitle } = React.useContext(Context);
+    const { setTitle } = React.useContext(TitleContext);
     const player = useFeaturePlayer(feature, setFeature);
 
     React.useEffect(() => {

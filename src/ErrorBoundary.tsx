@@ -21,9 +21,14 @@ export class ErrorBoundary extends React.Component<any, ErrorBoundaryState> {
 
     render() {
         if (this.state.hasError)
-            return <div className="alert alert-danger" role="alert">
-                Error: {this.state.error.message}
-            </div>
+            return <>
+                <div className="container">
+                    <pre className="alert alert-danger" role="alert">
+                        {this.state.error.stack || this.state.error.message}
+                    </pre>
+                </div>
+            </>
+
 
         return this.props.children;
     }
