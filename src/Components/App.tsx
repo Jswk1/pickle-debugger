@@ -4,24 +4,19 @@ import { Head } from "./Head";
 import { Debugger } from "./Debugger/Debugger";
 import { ErrorBoundary } from "../ErrorBoundary";
 import "./App.scss";
-import { NotificationContainer, TNotification } from "./UI/Notification";
+import { NotificationContainer, NotificationContext, notificationReducer } from "./UI/Notification";
 
 export const TitleContext = React.createContext<{ title: string, setTitle: (title: string) => void }>({
     title: null,
     setTitle: () => { }
 });
 
-export const NotificationContext = React.createContext<{ notifications: TNotification[], setNotifications: (notifications: TNotification[]) => void }>({
-    notifications: [],
-    setNotifications: () => { }
-});
-
 export const App = () => {
     const [title, setTitle] = React.useState<string>(null);
     const titleValue = React.useMemo(() => ({ title, setTitle }), [title]);
 
-    const [notifications, setNotifications] = React.useState<TNotification[]>([]);
-    const notificationsValue = React.useMemo(() => ({ notifications, setNotifications }), [notifications]);
+    const [notifications, dispatchNotificationAction] = React.useReducer(notificationReducer, []);
+    const notificationsValue = React.useMemo(() => ({ notifications, dispatchNotificationAction }), [notifications]);
 
     return <>
         <NotificationContext.Provider value={notificationsValue}>

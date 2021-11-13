@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useFeature } from "../../Hooks/UseFeature";
 import { useFeaturePlayer } from "../../Hooks/UseFeaturePlayer";
-import { useNotification } from "../../Hooks/UseNotification";
 import { IScenario, IStep } from "../../Types";
 import { TitleContext } from "../App";
 import { Column } from "../UI/Column";

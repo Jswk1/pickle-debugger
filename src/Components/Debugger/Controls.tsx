@@ -3,17 +3,17 @@ import * as React from "react";
 import { TFeaturePlayer } from "../../Hooks/UseFeaturePlayer";
 import { Button } from "../UI/Button";
 import { reloadScripts } from "../../Data";
-import { useNotification } from "../../Hooks/UseNotification";
+import { NotificationContext } from "../UI/Notification";
 
 export const Controls = (props: { player: TFeaturePlayer }) => {
     const { player } = props;
     const canPlay = !player.isPlayingCurrentStep && !player.isPlayingAll && !player.isPlayingCurrentScenario;
     const [tooltip, setTooltip] = React.useState("");
-    const { addNotification } = useNotification();
+    const { dispatchNotificationAction: dispatch } = React.useContext(NotificationContext);
 
     const onReload = async () => {
         await reloadScripts();
-        addNotification({ text: "Scripts reloaded!", kind: "light" });
+        dispatch({ type: "add", notification: { text: "Scripts reloaded!", kind: "success" } })
     }
 
     return <div className="mb-2">
