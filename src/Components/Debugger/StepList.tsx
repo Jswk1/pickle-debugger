@@ -52,7 +52,7 @@ const Step = (props: { step: IStep }) => {
     const { step } = props;
 
     const [copyVisible, setCopyVisible] = React.useState(false);
-    const shouldIdent = step.keyword === "and";
+    const shouldIdent = step.keyword.toLowerCase() === "and";
 
     return <>
         <div className="d-flex align-items-center" onMouseEnter={() => setCopyVisible(true)} onMouseLeave={() => setCopyVisible(false)}>
