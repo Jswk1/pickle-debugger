@@ -17,9 +17,9 @@ export const Controls = (props: { player: TFeaturePlayer }) => {
     }
 
     return <div className="mb-2">
-        <Button class={"btn-success"} icon={canPlay ? faPlay : faSpinner} spinIcon={!canPlay} onClick={() => player.setIsPlayingCurrentStep(true)} onHover={e => setTooltip(e)} tooltip={"Run step"} disabled={!canPlay} />
+        <Button class={"btn-success"} icon={canPlay ? faPlay : faSpinner} spinIcon={!canPlay} onClick={() => player.setIsPlayingAll(true)} onHover={e => setTooltip(e)} tooltip={"Run feature"} disabled={!canPlay} />
         <Button class={"btn-success"} icon={faStepForward} onClick={() => player.setIsPlayingCurrentScenario(true)} onHover={e => setTooltip(e)} tooltip={"Run scenario"} disabled={!canPlay} />
-        <Button class={"btn-success"} icon={faFastForward} onClick={() => player.setIsPlayingAll(true)} onHover={e => setTooltip(e)} tooltip={"Run feature"} disabled={!canPlay} />
+        <Button class={"btn-success"} icon={faFastForward} onClick={() => player.setIsPlayingCurrentStep(true)} onHover={e => setTooltip(e)} tooltip={"Run step"} disabled={!canPlay} />
         <Button class={"btn-warning"} icon={faPause} onClick={() => player.pause()} onHover={e => setTooltip(e)} tooltip={"Pause after current step"} />
         <Button class={"btn-danger"} icon={faStop} onClick={() => player.reset(true)} onHover={e => setTooltip(e)} tooltip={"Reset to start"} />
         <Button class={"btn-light"} icon={faCode} onClick={onReload} onHover={e => setTooltip(e)} tooltip={"Reload all test source code to account for new changes"}>Reload Scripts</Button>
