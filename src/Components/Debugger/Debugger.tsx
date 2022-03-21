@@ -9,9 +9,12 @@ import { ScenarioList } from "./ScenarioList";
 import { StepList } from "./StepList";
 import { Variables } from "./Variables";
 import "./Debugger.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 export const Debugger = () => {
     const { loading, feature, setFeature } = useFeature();
+    const [isReloading, setIsReloading] = React.useState(false);
     const { setTitle } = React.useContext(TitleContext);
     const player = useFeaturePlayer(feature, setFeature);
 
@@ -58,7 +61,10 @@ export const Debugger = () => {
 
     return <>
         <div className="container-fluid pt-2 bg-dark text-light flex-grow-1 overflow-auto d-flex flex-column">
-            <Controls player={player} />
+            {isReloading && <div className="loading-layer d-flex">
+                <FontAwesomeIcon icon={faSpinner} spin={true} size={"3x"} className="m-auto" />
+            </div>}
+            <Controls player={player} setIsReloading={setIsReloading} />
             <div className="row flex-grow-1 overflow-auto flex-nowrap">
                 <Column title="Scenarios" borderClass="border-primary" columnCss="col sidebar">
                     <ScenarioList feature={feature} currentScenarioId={player.currentScenarioId} onScenarioClick={onScenarioClick} />

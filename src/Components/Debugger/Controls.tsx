@@ -5,15 +5,19 @@ import { Button } from "../UI/Button";
 import { reloadScripts } from "../../Data";
 import { NotificationContext } from "../UI/Notification";
 
-export const Controls = (props: { player: TFeaturePlayer }) => {
-    const { player } = props;
+export const Controls = (props: { player: TFeaturePlayer, setIsReloading: (isReloading: boolean) => void; }) => {
+    const { player, setIsReloading } = props;
     const canPlay = !player.isPlayingCurrentStep && !player.isPlayingAll && !player.isPlayingCurrentScenario;
     const [tooltip, setTooltip] = React.useState("");
     const { dispatchNotificationAction: dispatch } = React.useContext(NotificationContext);
 
     const onReload = async () => {
+        setIsReloading(true);
+
         await reloadScripts();
-        dispatch({ type: "add", notification: { text: "Scripts reloaded!", kind: "success" } })
+        dispatch({ type: "add", notification: { text: "Scripts reloaded!", kind: "success" } });
+
+        setIsReloading(false);
     }
 
     return <div className="mb-2">
