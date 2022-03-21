@@ -14,6 +14,7 @@ export function useFeaturePlayer(feature: IFeature, setFeature: React.Dispatch<R
     const [variables, setVariables] = React.useState<object>({});
 
     const getCurrentScenario = () => feature.scenarios.find(e => e.id === currentScenarioId);
+    const setPageTitle = (icon: "⏸" | "⏯", scenarioName: string, stepName: string) => document.title = `${icon} ${scenarioName} - ${stepName}`;
 
     const reset = (clearStatus: boolean) => {
         pause();
@@ -101,8 +102,8 @@ export function useFeaturePlayer(feature: IFeature, setFeature: React.Dispatch<R
 
     const runStep = async (stepId: number, autoAdvance?: boolean) => {
         const currentScenario = getCurrentScenario();
-        const outcome = await postStep(currentScenario.id, stepId);
         const step = getStepById(stepId);
+        const outcome = await postStep(currentScenario.id, stepId);
 
         step.outcome = outcome;
 
@@ -131,6 +132,15 @@ export function useFeaturePlayer(feature: IFeature, setFeature: React.Dispatch<R
 
         return () => { canPlay = false; }
     }, [isPlayingCurrentStep, isPlayingCurrentScenario, isPlayingAll, currentStepId]);
+
+    React.useEffect(() => {
+        if (feature?.scenarios?.length > 0) {
+            const currentScenario = getCurrentScenario();
+            const step = getStepById(currentStepId);
+            const icon = (isPlayingCurrentStep || isPlayingCurrentScenario || isPlayingAll) ? "⏯" : "⏸";
+            setPageTitle(icon, currentScenario.name, step.name);
+        }
+    }, [isPlayingCurrentStep, isPlayingCurrentScenario, isPlayingAll, currentStepId, currentScenarioId])
 
     const pause = () => {
         setIsPlayingAll(false);
