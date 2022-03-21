@@ -8,6 +8,7 @@ import { Controls } from "./Controls";
 import { ScenarioList } from "./ScenarioList";
 import { StepList } from "./StepList";
 import { Variables } from "./Variables";
+import "./Debugger.scss";
 
 export const Debugger = () => {
     const { loading, feature, setFeature } = useFeature();
@@ -59,10 +60,10 @@ export const Debugger = () => {
         <div className="container-fluid pt-2 bg-dark text-light flex-grow-1 overflow-auto d-flex flex-column">
             <Controls player={player} />
             <div className="row flex-grow-1 overflow-auto flex-nowrap">
-                <Column title="Scenarios" borderClass="border-primary" columnCss="col">
+                <Column title="Scenarios" borderClass="border-primary" columnCss="col sidebar">
                     <ScenarioList feature={feature} currentScenarioId={player.currentScenarioId} onScenarioClick={onScenarioClick} />
                 </Column>
-                <Column title={currentScenario?.name} borderClass="border-success" columnCss="col-8 d-flex flex-column">
+                <Column title={currentScenario?.name} borderClass="border-success" columnCss="col d-flex flex-column">
                     <div className="flex-grow-1 overflow-auto">
                         {feature.backgroundSteps?.length > 0 &&
                             <StepList title={"Background Steps"} steps={feature.backgroundSteps} currentStepId={player.currentStepId}
@@ -74,7 +75,7 @@ export const Debugger = () => {
                         }
                     </div>
                 </Column>
-                <Column title="Variables" borderClass="border-warning" columnCss="col">
+                <Column title="Variables" borderClass="border-warning" columnCss="col sidebar">
                     <Variables variables={player.variables} updateVariables={player.updateVariables} />
                 </Column>
             </div>
