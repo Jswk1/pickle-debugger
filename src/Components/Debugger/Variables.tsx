@@ -53,7 +53,7 @@ export const Variables = (props: { variables: TVariables, updateVariables: (newV
                     {Object.keys(variables).map(k => {
                         return <tr key={k}>
                             <td className={changedKeys.includes(k) ? "text-success" : ""}>{k}</td>
-                            <td className="w-100">{typeof variables[k] === "object" ? JSON.stringify(variables[k]) : variables[k]}</td>
+                            <td className="w-100"><pre className="mb-0">{typeof variables[k] === "object" ? JSON.stringify(variables[k], undefined, 2) : variables[k]}</pre></td>
                         </tr>
                     })}
                 </tbody>
