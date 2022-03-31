@@ -39,7 +39,9 @@ export const ScenarioList = (props: { feature: IFeature, currentScenarioId: numb
         </a>
     }
 
-    return <ul className="list-group">
-        {feature.scenarios.map((e, i) => listItem(e, i))}
-    </ul>
+    return <div className="flex-grow-1 overflow-auto">
+        <ul className="list-group">
+            {feature.scenarios.map((e, i) => listItem(e, i))}
+        </ul>
+    </div>
 }

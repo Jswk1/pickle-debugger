@@ -66,10 +66,10 @@ export const Debugger = () => {
             </div>}
             <Controls player={player} setIsReloading={setIsReloading} />
             <div className="row flex-grow-1 overflow-auto flex-nowrap">
-                <Column title="Scenarios" borderClass="border-primary" columnCss="col sidebar">
+                <Column title="Scenarios" borderClass="border-primary" columnCss="sidebar">
                     <ScenarioList feature={feature} currentScenarioId={player.currentScenarioId} onScenarioClick={onScenarioClick} />
                 </Column>
-                <Column title={currentScenario?.name} borderClass="border-success" columnCss="col d-flex flex-column">
+                <Column title={currentScenario?.name} borderClass="border-success">
                     <div className="flex-grow-1 overflow-auto">
                         {feature.backgroundSteps?.length > 0 &&
                             <StepList title={"Background Steps"} steps={feature.backgroundSteps} currentStepId={player.currentStepId}
@@ -81,7 +81,7 @@ export const Debugger = () => {
                         }
                     </div>
                 </Column>
-                <Column title="Variables" borderClass="border-warning" columnCss="col sidebar">
+                <Column title="Variables" borderClass="border-warning" columnCss="sidebar">
                     <Variables variables={player.variables} updateVariables={player.updateVariables} />
                 </Column>
             </div>
