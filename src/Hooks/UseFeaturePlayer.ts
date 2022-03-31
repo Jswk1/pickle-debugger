@@ -67,19 +67,11 @@ export function useFeaturePlayer(feature: IFeature, setFeature: React.Dispatch<R
         const step = getStepById(currentStepId);
         const currentScenario = getCurrentScenario();
 
-        const setNextStep = (stepId: number) => {
-            setCurrentStepId(stepId);
-
-            const nextStep = getStepById(stepId);
-            if (nextStep.breakpoint)
-                pause();
-        }
-
         if (step.nextStepId)
-            setNextStep(step.nextStepId);
+            setCurrentStepId(step.nextStepId);
         else
             if (step.type === StepType.Background)
-                setNextStep(currentScenario.steps[0].id);
+                setCurrentStepId(currentScenario.steps[0].id);
             else {
                 const nextScenario = feature.scenarios.find(e => e.id === currentScenario.nextScenarioId);
                 if (nextScenario) {
@@ -92,9 +84,9 @@ export function useFeaturePlayer(feature: IFeature, setFeature: React.Dispatch<R
 
                     setCurrentScenarioId(nextScenario.id);
                     if (feature.backgroundSteps?.length > 0)
-                        setNextStep(feature.backgroundSteps[0].id);
+                        setCurrentStepId(feature.backgroundSteps[0].id);
                     else
-                        setNextStep(nextScenario.steps[0].id);
+                        setCurrentStepId(nextScenario.steps[0].id);
                 } else
                     pause();
             }
@@ -103,6 +95,10 @@ export function useFeaturePlayer(feature: IFeature, setFeature: React.Dispatch<R
     const runStep = async (stepId: number, autoAdvance?: boolean) => {
         const currentScenario = getCurrentScenario();
         const step = getStepById(stepId);
+
+        if (step.breakpoint)
+            return pause();
+
         const outcome = await postStep(currentScenario.id, stepId);
 
         step.outcome = outcome;
