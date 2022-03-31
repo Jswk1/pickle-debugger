@@ -53,7 +53,7 @@ export const Progress = (props: { feature: IFeature, player: TFeaturePlayer }) =
             {progressBars.map((e, i) => {
                 const percentage = (e.count * 100) / total;
 
-                return <div className={`progress-bar progress-bar-striped ${player.isPlaying() ? "progress-bar-animated" : ""} ${e.type}`} role="progressbar" style={{ width: `${percentage}%` }}></div>;
+                return <div key={i} className={`progress-bar progress-bar-striped ${player.isPlaying() ? "progress-bar-animated" : ""} ${e.type}`} role="progressbar" style={{ width: `${percentage}%` }}></div>;
             })}
         </div>
     </>
