@@ -1,6 +1,7 @@
 import * as webpack from "webpack";
 import * as htmlWebpackPlugin from "html-webpack-plugin";
 import * as path from "path";
+import "webpack-dev-server";
 
 const htmlPlugin = new htmlWebpackPlugin({
     publicPath: "/",
