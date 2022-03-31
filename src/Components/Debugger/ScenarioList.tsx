@@ -1,5 +1,7 @@
 import { IFeature, IScenario, TestStatus } from "../../Types";
 import * as React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 export const ScenarioList = (props: { feature: IFeature, currentScenarioId: number, onScenarioClick: (scenario: IScenario) => void }) => {
     const { feature, currentScenarioId, onScenarioClick } = props;
@@ -33,15 +35,25 @@ export const ScenarioList = (props: { feature: IFeature, currentScenarioId: numb
 
         const isActive = scenario.id === currentScenarioId;
 
-        return <a key={key} href="#" onClick={() => onScenarioClick(scenario)} className={`list-group-item list-group-item-action d-flex justify-content-between align-items-center ${isActive ? "fw-bold" : ""}`}>
-            {scenario.name}
-            <span className={`badge ${getStatusBackground()}`}>{(feature.backgroundSteps?.length || 0) + (scenario.steps?.length || 0)}</span>
-        </a>
+        return <tr key={key} onClick={() => onScenarioClick(scenario)} className="action">
+            <td>{isActive && <FontAwesomeIcon icon={faArrowRight} />}</td>
+            <td>{scenario.name}</td>
+            <td className="text-center"><span className={`badge ${getStatusBackground()}`}>{(feature.backgroundSteps?.length || 0) + (scenario.steps?.length || 0)}</span></td>
+        </tr >
     }
 
-    return <div className="flex-grow-1 overflow-auto">
-        <ul className="list-group">
-            {feature.scenarios.map((e, i) => listItem(e, i))}
-        </ul>
+    return <div className="table-responsive">
+        <table className="table table-dark table-striped table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Steps</th>
+                </tr>
+            </thead>
+            <tbody>
+                {feature.scenarios.map((e, i) => listItem(e, i))}
+            </tbody>
+        </table>
     </div>
 }

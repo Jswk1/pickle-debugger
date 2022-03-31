@@ -7,7 +7,7 @@ import { NotificationContext } from "../UI/Notification";
 
 export const Controls = (props: { player: TFeaturePlayer, setIsReloading: (isReloading: boolean) => void; }) => {
     const { player, setIsReloading } = props;
-    const canPlay = !player.isPlayingCurrentStep && !player.isPlayingAll && !player.isPlayingCurrentScenario;
+    const canPlay = !player.isPlaying();
     const [tooltip, setTooltip] = React.useState("");
     const { dispatchNotificationAction: dispatch } = React.useContext(NotificationContext);
 

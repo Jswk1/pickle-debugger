@@ -11,6 +11,7 @@ import { Variables } from "./Variables";
 import "./Debugger.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { Progress } from "./Progress";
 
 export const Debugger = () => {
     const { loading, feature, setFeature } = useFeature();
@@ -84,6 +85,9 @@ export const Debugger = () => {
                 <Column title="Variables" borderClass="border-warning" columnCss="sidebar">
                     <Variables variables={player.variables} updateVariables={player.updateVariables} />
                 </Column>
+            </div>
+            <div className="p-2">
+                <Progress feature={feature} player={player} />
             </div>
         </div>
     </>

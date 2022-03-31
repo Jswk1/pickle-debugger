@@ -78,8 +78,7 @@ export function useFeaturePlayer(feature: IFeature, setFeature: React.Dispatch<R
 
                     if (isPlayingCurrentScenario) {
                         setIsPlayingCurrentScenario(false);
-                        pause();
-                        return;
+                        return pause();
                     }
 
                     setCurrentScenarioId(nextScenario.id);
@@ -165,6 +164,7 @@ export function useFeaturePlayer(feature: IFeature, setFeature: React.Dispatch<R
         setIsPlayingCurrentScenario,
         runStep,
         reset,
-        pause
+        pause,
+        isPlaying: () => isPlayingCurrentStep || isPlayingCurrentScenario || isPlayingAll
     };
 }
