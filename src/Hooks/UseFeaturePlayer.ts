@@ -95,9 +95,6 @@ export function useFeaturePlayer(feature: IFeature, setFeature: React.Dispatch<R
         const currentScenario = getCurrentScenario();
         const step = getStepById(stepId);
 
-        if (step.breakpoint)
-            return pause();
-
         const outcome = await postStep(currentScenario.id, stepId);
 
         step.outcome = outcome;
@@ -105,7 +102,7 @@ export function useFeaturePlayer(feature: IFeature, setFeature: React.Dispatch<R
         if (isPlayingCurrentStep)
             setIsPlayingCurrentStep(false);
 
-        if (outcome.status === TestStatus.Error)
+        if (outcome.status === TestStatus.Error || step.breakpoint)
             pause();
         else
             if (autoAdvance)
