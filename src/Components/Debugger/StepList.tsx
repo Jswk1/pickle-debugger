@@ -48,17 +48,34 @@ export const StepList = (props: { steps: IStep[], currentStepId: number, title: 
     </>
 }
 
+export function colorizeStep(step: IStep) {
+    const matches = step.definition.expression.regexp.exec(step.name);
+    let content = step.name;
+
+    for (let i = 1; i < matches.length; i++) {
+        const match = matches[i];
+        if (!match)
+            break;
+
+        content = content.replace(match, `<span class="highlight">${match}</span>`);
+    }
+
+    return content;
+}
+
 const Step = (props: { step: IStep }) => {
     const { step } = props;
 
     const [copyVisible, setCopyVisible] = React.useState(false);
     const shouldIdent = step.keyword.toLowerCase() === "and";
 
+    colorizeStep(step);
+
     return <>
         <div className="d-flex align-items-center" onMouseEnter={() => setCopyVisible(true)} onMouseLeave={() => setCopyVisible(false)}>
             {shouldIdent && <div className="icon-cell"></div>}
             <span className="text-primary">{capitalize(step.keyword)}</span>&nbsp;
-            <span className="me-2">{step.name}</span>
+            <span className="me-2" dangerouslySetInnerHTML={{ __html: colorizeStep(step) }}></span>
             {copyVisible && <FontAwesomeIcon icon={faCopy} className="text-light" title={"Copy step definition"} onClick={() => copyToClipboard(step.definition.pattern)} />}
         </div>
         {step.outcome?.error && <pre>{step.outcome?.error}</pre>}

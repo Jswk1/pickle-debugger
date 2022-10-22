@@ -70,7 +70,7 @@ export const Debugger = () => {
                 <Column title="Scenarios" borderClass="border-primary" columnCss="sidebar">
                     <ScenarioList feature={feature} currentScenarioId={player.currentScenarioId} onScenarioClick={onScenarioClick} />
                 </Column>
-                <Column title={currentScenario?.name} borderClass="border-success">
+                <Column title={currentScenario?.name} borderClass="border-success" columnCss="overflow-auto">
                     <div className="flex-grow-1 overflow-auto">
                         {feature.backgroundSteps?.length > 0 &&
                             <StepList title={"Background Steps"} steps={feature.backgroundSteps} currentStepId={player.currentStepId}
