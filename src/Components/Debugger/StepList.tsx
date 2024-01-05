@@ -40,7 +40,7 @@ export const StepList = (props: { steps: IStep[], currentStepId: number, title: 
 
     return <>
         <table className="table w-auto table-dark table-sm table-bordered table-striped table-hover caption-top">
-            <caption>{title}</caption>
+            <caption className="text-light">{title}</caption>
             <tbody>
                 {steps.map(getStep)}
             </tbody>

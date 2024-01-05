@@ -1,6 +1,6 @@
 import * as React from "react";
 
-export const Column = (props: React.PropsWithChildren<{ title: string, borderClass: string, columnCss?: string, collapsed?: boolean }>) => {
+export const Column = (props: React.PropsWithChildren<{ title: string, borderClass: string, columnCss?: string, collapsed?: boolean, collapseDirection: "vertical" | "horizontal" }>) => {
     const [collapsed, setCollapsed] = React.useState(props.collapsed || false);
 
     const toggleCollapsed = () => setCollapsed(!collapsed);
