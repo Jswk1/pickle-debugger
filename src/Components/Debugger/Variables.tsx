@@ -37,12 +37,9 @@ export const Variables = (props: { variables: TVariables, updateVariables: (newV
     }, [variables]);
 
     return <>
-        <div className="mb-2">
-            <Button class="btn-light" icon={faSave} onClick={() => saveFile(JSON.stringify(variables), "variables.json", "application/json")}>Save</Button>
-            <Button class="btn-light" icon={faUpload} onClick={() => loadFile(updateVariables)}>Load</Button>
-        </div>
         <div className="flex-grow-1 overflow-auto">
             <table className="table w-auto table-dark table-sm table-bordered table-striped table-hover caption-top">
+                <caption className="text-light">Variables</caption>
                 <thead>
                     <tr>
                         <th>Key</th>

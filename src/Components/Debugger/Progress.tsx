@@ -26,7 +26,8 @@ export const Progress = (props: { feature: IFeature, player: TFeaturePlayer }) =
     }
 
     for (const scenario of feature.scenarios) {
-        for (const step of scenario.steps) {
+        const steps = feature.backgroundSteps.concat(scenario.steps);
+        for (const step of steps) {
             const { outcome } = step;
 
             total++;
