@@ -34,7 +34,7 @@ export const NotificationContainer = () => {
     const containerEl = document.querySelector("#portal");
 
     return ReactDOM.createPortal(<>
-        <ToastContainer>
+        <ToastContainer position="bottom-end">
             {notifications.map(e => <Notification key={e.id} {...e} />)}
         </ToastContainer>
     </>, containerEl);
@@ -45,10 +45,10 @@ const Notification = (props: TNotification) => {
 
     useTimeout(() => {
         dispatch({ type: "remove", id: props.id });
-    }, 3000);
+    }, 5000);
 
-    return <Toast bg={props.kind}>
-        <Toast.Body className="text-dark">
+    return <Toast bg={props.kind} className="fade">
+        <Toast.Body className="text-light">
             {props.text}
         </Toast.Body>
     </Toast>

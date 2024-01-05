@@ -12,8 +12,11 @@ import "./Debugger.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { Progress } from "./Progress";
+import { copyToClipboard } from "../../Utils/Clipboard";
+import { NotificationContext } from "../UI/Notification";
 
 export const Debugger = () => {
+    const { dispatchNotificationAction: dispatch } = React.useContext(NotificationContext);
     const { loading, feature, setFeature } = useFeature();
     const [isReloading, setIsReloading] = React.useState(false);
     const { setTitle } = React.useContext(TitleContext);
@@ -37,7 +40,7 @@ export const Debugger = () => {
             player.setCurrentStepId(scenario.steps[0].id);
     };
 
-    const stepToggleBreakpoint = (step: IStep) => {
+    const onStepToggleBreakpoint = (step: IStep) => {
         const mapSteps = (s: IStep): IStep => {
             if (step.id === s.id)
                 return { ...s, breakpoint: !(!!s.breakpoint) };
@@ -54,6 +57,18 @@ export const Debugger = () => {
         });
     }
 
+    const onStepClick = (step: IStep) => {
+        if (player.isPlaying())
+            return;
+
+        player.setCurrentStepId(step.id);
+    }
+
+    const onStepRightClick = (step: IStep) => {
+        copyToClipboard(step.definition.pattern);
+        dispatch({ type: "add", notification: { text: `Step copied: ${step.name}`, kind: "success" } });
+    }
+
     if (loading)
         return <div>Loading...</div>
 
@@ -67,21 +82,27 @@ export const Debugger = () => {
             </div>}
             <Controls player={player} setIsReloading={setIsReloading} />
             <div className="row flex-grow-1 overflow-auto flex-nowrap">
-                <Column title="Scenarios" borderClass="border-primary" columnCss="sidebar" collapseDirection="vertical">
+                <Column title="Scenarios" borderClass="border-primary" columnCss="sidebar" >
                     <ScenarioList feature={feature} currentScenarioId={player.currentScenarioId} onScenarioClick={onScenarioClick} />
                     <Variables variables={player.variables} updateVariables={player.updateVariables} />
                 </Column>
-                <Column title={currentScenario?.name} borderClass="border-success" columnCss="overflow-auto" collapseDirection="horizontal">
+                <Column title={currentScenario?.name} borderClass="border-success" columnCss="overflow-auto">
                     <div className="flex-grow-1 overflow-auto">
                         {feature.backgroundSteps?.length > 0 &&
                             <StepList title={"Background Steps"} steps={feature.backgroundSteps} currentStepId={player.currentStepId}
-                                onStepClick={(step) => player.setCurrentStepId(step.id)} onStepBreakpointClick={stepToggleBreakpoint} />
+                                onStepClick={onStepClick} onStepRightClick={onStepRightClick} onStepBreakpointClick={onStepToggleBreakpoint} />
                         }
                         {currentScenarioSteps.length > 0 &&
                             <StepList title={"Scenario Steps"} steps={currentScenarioSteps} currentStepId={player.currentStepId}
-                                onStepClick={(step) => player.setCurrentStepId(step.id)} onStepBreakpointClick={stepToggleBreakpoint} />
+                                onStepClick={onStepClick} onStepRightClick={onStepRightClick} onStepBreakpointClick={onStepToggleBreakpoint} />
                         }
                     </div>
+                </Column>
+                <Column title="Info & Tips" borderClass="border-danger" collapsed={true}>
+                    <ul>
+                        <li>The steps are automatically reloaded when source code is changed.</li>
+                        <li>Right click step to copy it's definition for easier search in code.</li>
+                    </ul>
                 </Column>
             </div>
             <div className="p-2">
