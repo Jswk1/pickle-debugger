@@ -16,11 +16,12 @@
 
     align-items: end;
     justify-items: end;
-
+    pointer-events: none !important;
 }
 
 .fade {
     animation: fade 5s;
+    pointer-events: none !important;
 }
 
 @keyframes fade {

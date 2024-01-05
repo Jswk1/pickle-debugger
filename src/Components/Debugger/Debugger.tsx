@@ -66,7 +66,7 @@ export const Debugger = () => {
 
     const onStepRightClick = (step: IStep) => {
         copyToClipboard(step.definition.pattern);
-        dispatch({ type: "add", notification: { text: `Step copied: ${step.name}`, kind: "success" } });
+        dispatch({ type: "add", notification: { text: `Step copied: ${step.name}`, kind: "info" } });
     }
 
     if (loading)
@@ -102,6 +102,9 @@ export const Debugger = () => {
                     <ul>
                         <li>The steps are automatically reloaded when source code is changed.</li>
                         <li>Right click step to copy it's definition for easier search in code.</li>
+                        <li>Clickable links to source code can be found in Pickle's console.</li>
+                        <li>Step breakpoints are triggered <u>before</u>, not after step execution.</li>
+                        <li>Variables added in last executed steps have their keys highlighted in <span className="text-success">green</span>.</li>
                     </ul>
                 </Column>
             </div>

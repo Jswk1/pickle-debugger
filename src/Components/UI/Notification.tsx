@@ -26,7 +26,7 @@ export const notificationReducer = (state: TNotification[], action: TNotificatio
 export type TNotification = {
     id?: number;
     text: string;
-    kind: "light" | "danger" | "success";
+    kind: "info" | "light" | "danger" | "success";
 }
 
 export const NotificationContainer = () => {
@@ -48,7 +48,7 @@ const Notification = (props: TNotification) => {
     }, 5000);
 
     return <Toast bg={props.kind} className="fade">
-        <Toast.Body className="text-light">
+        <Toast.Body className={props.kind === "light" ? "text-dark" : "text-light"}>
             {props.text}
         </Toast.Body>
     </Toast>
