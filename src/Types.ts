@@ -39,6 +39,7 @@ export interface IStepDefinition {
     }
 
     pattern: string;
+    filePath?: string;
 }
 
 export interface IStep {

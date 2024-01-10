@@ -67,6 +67,10 @@ export const Debugger = () => {
     const onStepRightClick = (step: IStep) => {
         copyToClipboard(step.definition.pattern);
         dispatch({ type: "add", notification: { text: `Step copied: ${step.name}`, kind: "info" } });
+
+        const aTag = document.createElement("a");
+        aTag.href = `vscode://file/${step.definition.filePath}`;
+        aTag.click();
     }
 
     if (loading)
